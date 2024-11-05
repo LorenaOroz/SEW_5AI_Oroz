@@ -2,9 +2,10 @@
 import Song from "@/components/Song.vue";
 </script>
 
-<template>
-  <Song/>
+<template data-theme="retro">
+    <Song/>
 </template>
 
 <style scoped>
+
 </style>
