@@ -60,4 +60,9 @@ public class SongController {
         }
     }
 
+    @GetMapping("/songs/search")
+    public List<Song> searchSongs(@RequestParam String query) {
+        return songRepository.findByTitleContainingIgnoreCaseOrArtistContainingIgnoreCase(query, query);
+    }
+
 }

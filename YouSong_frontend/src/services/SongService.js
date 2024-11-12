@@ -18,6 +18,12 @@ class SongService {
     deleteSong(id) {
         return axios.delete(`${SONG_API_BASE}/${id}`);
     }
+
+    searchSongs(query) {
+        return axios.get(`${SONG_API_BASE}/search`, {
+            params: { query }
+        });
+    }
 }
 
 export default new SongService();

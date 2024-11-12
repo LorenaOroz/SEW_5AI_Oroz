@@ -1,6 +1,27 @@
 <template>
   <div class="alles flex flex-col items-center">
     <p class="text-center text-6xl mb-12 mt-12 font-bold">Song List</p>
+
+    <label class="input input-bordered flex items-center gap-2">
+      <input v-model="search" type="text" class="grow" placeholder="Search for title or artist" />
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          class="h-4 w-4 opacity-70">
+        <path
+            fill-rule="evenodd"
+            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+            clip-rule="evenodd" />
+      </svg>
+    </label>
+
+
+    <div v-if="songs.length === 0 && search" class="text-center text-red-500 mb-12">
+      No songs can be found. Please adjust your search.
+    </div>
+
+
     <!-- <img class="w-1/6" src="https://cdn.pixabay.com/photo/2023/02/24/07/40/spiderman-7810368_1280.png" alt="spiderman"/> -->
     <div class="container overflow-x-auto m-auto w-1/3">
       <table class="table table-zebra">
@@ -31,8 +52,10 @@
     </div>
     <div>
       <button class="btn btn-outline mt-6" @click="toggleCreateForm">Add Song</button>
-      <AddSong v-if="createFormVisible" :visible="createFormVisible" @close="createFormVisible = false" @song-added="addNewSong" />
-      <EditSong v-if="editFormVisible" :visible="editFormVisible" :song="currentSong" @close="editFormVisible = false" @song-updated="updateSongInList" />
+      <AddSong v-if="createFormVisible" :visible="createFormVisible" @close="createFormVisible = false"
+               @song-added="addNewSong"/>
+      <EditSong v-if="editFormVisible" :visible="editFormVisible" :song="currentSong" @close="editFormVisible = false"
+                @song-updated="updateSongInList"/>
     </div>
   </div>
 </template>
@@ -41,6 +64,7 @@
 import SongService from "@/services/SongService.js";
 import AddSong from "@/components/AddSong.vue";
 import EditSong from "@/components/EditSong.vue";
+import {watch, ref} from "vue";
 
 export default {
   name: "Songs",
@@ -51,6 +75,7 @@ export default {
   data() {
     return {
       songs: [],
+      search: "",
       createFormVisible: false,
       editFormVisible: false,
       currentSong: null,
@@ -66,38 +91,57 @@ export default {
             console.error("Error fetching songs:", error);
           });
     },
+    searchSongs() {
+      SongService.searchSongs(this.search)
+          .then((response) => {
+            this.songs = response.data;
+          })
+          .catch((error) => {
+            console.error("Error searching songs:", error);
+          });
+    },
     toggleCreateForm() {
       this.createFormVisible = !this.createFormVisible;
     },
     editSong(song) {
-      this.currentSong = { ...song };
+      this.currentSong = {...song};
       this.editFormVisible = true;
     },
     addNewSong(newSong) {
       this.songs.push(newSong);
     },
     updateSongInList(updatedSong) {
-      const index = this.songs.findIndex(song => song.id === updatedSong.id);
+      const index = this.songs.findIndex((song) => song.id === updatedSong.id);
       if (index !== -1) {
         this.songs.splice(index, 1, updatedSong);
       }
     },
     deleteSong(id) {
-        SongService.deleteSong(id)
-            .then(() => {
-              this.songs = this.songs.filter(song => song.id !== id);
-            })
-            .catch((error) => {
-              console.error("Error deleting song:", error);
-              alert("Failed to delete the song.");
-            });
-      }
+      SongService.deleteSong(id)
+          .then(() => {
+            this.songs = this.songs.filter((song) => song.id !== id);
+          })
+          .catch((error) => {
+            console.error("Error deleting song:", error);
+            alert("Failed to delete the song.");
+          });
+    },
   },
   created() {
     this.getSongs();
   },
+  watch: {
+    search(newSearch) {
+      if (newSearch) {
+        this.searchSongs();
+      } else {
+        this.getSongs();
+      }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 </style>
