@@ -1,6 +1,8 @@
 package com.YouSong.controller;
 
+import com.YouSong.dto.SongDTO;
 import com.YouSong.entity.Song;
+import com.YouSong.projection.SongFileProjection;
 import com.YouSong.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,10 @@ public class SongController {
     private SongRepository songRepository;
 
     @GetMapping("/songs")
-    public List<Song> fetchSongs() {
-        return songRepository.findAll();
+    public List<SongDTO> fetchSongs() {
+        return songRepository.findAll().stream()
+                .map(song -> new SongDTO(song.getId(), song.getTitle(), song.getArtist(), song.getGenre(), song.getLength()))
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -43,12 +47,16 @@ public class SongController {
             existingSong.setArtist(updatedSong.getArtist());
             existingSong.setGenre(updatedSong.getGenre());
             existingSong.setLength(updatedSong.getLength());
+            if (updatedSong.getFileData() != null && !updatedSong.getFileData().isEmpty()) {
+                existingSong.setFileData(updatedSong.getFileData()); // Update file data if provided
+            }
             songRepository.save(existingSong);
             return ResponseEntity.ok(existingSong);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @DeleteMapping("/songs/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
@@ -64,5 +72,16 @@ public class SongController {
     public List<Song> searchSongs(@RequestParam String query) {
         return songRepository.findByTitleContainingIgnoreCaseOrArtistContainingIgnoreCase(query, query);
     }
+
+    @GetMapping("/songs/{id}/play")
+    public ResponseEntity<String> getSongFileData(@PathVariable Long id) {
+        SongFileProjection songFile = songRepository.findFileDataById(id);
+        if (songFile != null) {
+            return ResponseEntity.ok(songFile.getFileData());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

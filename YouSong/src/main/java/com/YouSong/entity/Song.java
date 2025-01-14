@@ -18,4 +18,8 @@ public class Song {
     private String artist;
     private String genre;
     private double length;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String fileData;
 }

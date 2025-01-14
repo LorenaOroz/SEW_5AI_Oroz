@@ -1,11 +1,13 @@
 package  com.YouSong;
 
 import com.YouSong.entity.Song;
+import com.YouSong.projection.SongFileProjection;
 import com.YouSong.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.Query;
 
 @SpringBootApplication
 public class YouSongApplication implements CommandLineRunner {
@@ -20,4 +22,10 @@ public class YouSongApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 	}
+
+    @Query("SELECT s.fileData AS fileData FROM Song s WHERE s.id = :id")
+    SongFileProjection findFileDataById(Long id) {
+        return null;
+    }
+
 }

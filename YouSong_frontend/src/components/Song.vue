@@ -2,7 +2,7 @@
   <div class="alles flex flex-col items-center">
     <p class="text-center text-6xl mb-12 mt-12 font-bold">Song List</p>
 
-    <label class="input input-bordered flex items-center gap-2">
+    <label class="input input-bordered flex items-center gap-2 mb-12">
       <input v-model="search" type="text" class="grow" placeholder="Search for title or artist" />
       <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -16,13 +16,10 @@
       </svg>
     </label>
 
-
     <div v-if="songs.length === 0 && search" class="text-center text-red-500 mb-12">
       No songs can be found. Please adjust your search.
     </div>
 
-
-    <!-- <img class="w-1/6" src="https://cdn.pixabay.com/photo/2023/02/24/07/40/spiderman-7810368_1280.png" alt="spiderman"/> -->
     <div class="container overflow-x-auto m-auto w-1/3">
       <table class="table table-zebra">
         <thead>
@@ -45,18 +42,29 @@
           <td class="">
             <button class="btn btn-outline mr-6 mb-4" @click="editSong(song)">Edit</button>
             <button class="btn btn-outline btn-error" @click="deleteSong(song.id)">Delete</button>
+            <button class="btn btn-primary" @click="playSong(song)">Play</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
+
     <div>
-      <button class="btn btn-outline mt-6" @click="toggleCreateForm">Add Song</button>
+      <button class="btn btn-outline mt-6 mb-8" @click="toggleCreateForm">Add Song</button>
       <AddSong v-if="createFormVisible" :visible="createFormVisible" @close="createFormVisible = false"
                @song-added="addNewSong"/>
       <EditSong v-if="editFormVisible" :visible="editFormVisible" :song="currentSong" @close="editFormVisible = false"
                 @song-updated="updateSongInList"/>
     </div>
+
+
+    <div class="mt-6 mb-32" v-if="currentPlayingSong">
+      <p class="text-center text-lg mb-4">jetzt spieeeelt: {{ currentPlayingSong.title }} von {{ currentPlayingSong.artist }}</p>
+      <audio controls :src="currentPlayingSong.fileData" class="w-full">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
   </div>
 </template>
 
@@ -64,7 +72,6 @@
 import SongService from "@/services/SongService.js";
 import AddSong from "@/components/AddSong.vue";
 import EditSong from "@/components/EditSong.vue";
-import {watch, ref} from "vue";
 
 export default {
   name: "Songs",
@@ -79,6 +86,7 @@ export default {
       createFormVisible: false,
       editFormVisible: false,
       currentSong: null,
+      currentPlayingSong: null,
     };
   },
   methods: {
@@ -104,7 +112,7 @@ export default {
       this.createFormVisible = !this.createFormVisible;
     },
     editSong(song) {
-      this.currentSong = {...song};
+      this.currentSong = { ...song };
       this.editFormVisible = true;
     },
     addNewSong(newSong) {
@@ -126,6 +134,20 @@ export default {
             alert("Failed to delete the song.");
           });
     },
+    playSong(song) {
+      SongService.getSongFile(song.id)
+          .then((response) => {
+            this.currentPlayingSong = {
+              ...song,
+              fileData: response.data,
+            };
+          })
+          .catch((error) => {
+            console.error("Error fetching song file:", error);
+            alert("Failed to load the song file.");
+          });
+    },
+
   },
   created() {
     this.getSongs();
@@ -141,7 +163,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 </style>

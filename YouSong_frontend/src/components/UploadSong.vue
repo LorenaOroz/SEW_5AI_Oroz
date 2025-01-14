@@ -1,0 +1,13 @@
+<script setup>
+
+</script>
+
+<template>
+  <input
+      type="file"
+      class="file-input file-input-bordered file-input-primary w-full max-w-xs" />
+</template>
+
+<style scoped>
+
+</style>

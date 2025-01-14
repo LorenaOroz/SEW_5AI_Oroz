@@ -21,9 +21,14 @@ class SongService {
 
     searchSongs(query) {
         return axios.get(`${SONG_API_BASE}/search`, {
-            params: { query }
+            params: {query}
         });
     }
+
+    getSongFile(songId) {
+        return axios.get(`${SONG_API_BASE}/${songId}/play`);
+    }
+
 }
 
 export default new SongService();
