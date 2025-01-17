@@ -65,6 +65,15 @@
       </audio>
     </div>
 
+    <div class="mb-6 flex items-center justify-between w-1/3">
+      <button class="btn" :disabled="currentPage === 0" @click="goToFirstPage">First Page</button>
+      <button class="btn" :disabled="currentPage === 0" @click="goToPreviousPage">Previous</button>
+      <p class="text-lg">Page {{ currentPage + 1 }} of {{ totalPages }}</p>
+      <button class="btn" :disabled="currentPage === totalPages - 1" @click="goToNextPage">Next</button>
+      <button class="btn" :disabled="currentPage === totalPages - 1" @click="goToLastPage">Last Page</button>
+    </div>
+
+
   </div>
 </template>
 
@@ -87,9 +96,45 @@ export default {
       editFormVisible: false,
       currentSong: null,
       currentPlayingSong: null,
+      currentPage: 0,
+      totalPages: 0
     };
   },
   methods: {
+
+    fetchSongs(page) {
+      SongService.getPaginatedSongs(page)
+          .then((response) => {
+            this.songs = response.data.content;
+            this.currentPage = response.data.number;
+            this.totalPages = response.data.totalPages;
+          })
+          .catch((error) => {
+            console.error("Error fetching paginated songs:", error);
+          });
+    },
+    goToFirstPage() {
+      this.fetchSongs(0);
+    },
+    goToPreviousPage() {
+      if (this.currentPage > 0) {
+        this.fetchSongs(this.currentPage - 1);
+      }
+    },
+    goToNextPage() {
+      if (this.currentPage < this.totalPages - 1) {
+        this.fetchSongs(this.currentPage + 1);
+      }
+    },
+    goToLastPage() {
+      this.fetchSongs(this.totalPages - 1);
+    },
+  },
+  created() {
+    this.fetchSongs(0);
+  },
+
+  /*
     getSongs() {
       SongService.getSongs()
           .then((response) => {
@@ -98,7 +143,7 @@ export default {
           .catch((error) => {
             console.error("Error fetching songs:", error);
           });
-    },
+    },*/
     searchSongs() {
       SongService.searchSongs(this.search)
           .then((response) => {
@@ -148,10 +193,6 @@ export default {
           });
     },
 
-  },
-  created() {
-    this.getSongs();
-  },
   watch: {
     search(newSearch) {
       if (newSearch) {

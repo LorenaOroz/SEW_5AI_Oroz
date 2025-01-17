@@ -29,6 +29,13 @@ class SongService {
         return axios.get(`${SONG_API_BASE}/${songId}/play`);
     }
 
+    getPaginatedSongs(page, size = 5) {
+        return axios.get(`${SONG_API_BASE}/page`, {
+            params: { page, size },
+        });
+    }
+
+
 }
 
 export default new SongService();

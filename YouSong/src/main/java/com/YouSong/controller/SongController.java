@@ -5,6 +5,8 @@ import com.YouSong.entity.Song;
 import com.YouSong.projection.SongFileProjection;
 import com.YouSong.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,6 +83,21 @@ public class SongController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/songs/page")
+    public ResponseEntity<Page<SongDTO>> fetchSongsWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Page<Song> songsPage = songRepository.findAll(PageRequest.of(page, size));
+        Page<SongDTO> songDTOPage = songsPage.map(song -> new SongDTO(
+                song.getId(),
+                song.getTitle(),
+                song.getArtist(),
+                song.getGenre(),
+                song.getLength()
+        ));
+        return ResponseEntity.ok(songDTOPage);
     }
 
 
