@@ -4,6 +4,7 @@ import com.YouSong.dto.SongDTO;
 import com.YouSong.entity.Song;
 import com.YouSong.projection.SongFileProjection;
 import com.YouSong.repository.SongRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,14 +35,14 @@ public class SongController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody Song song) {
+    public ResponseEntity<Song> createSong(@Valid @RequestBody Song song) {
         song.setId(0);
         Song savedSong = songRepository.save(song);
         return ResponseEntity.ok(savedSong);
     }
 
     @PutMapping("/songs/{id}")
-    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody Song updatedSong) {
+    public ResponseEntity<Song> updateSong(@PathVariable Long id, @Valid @RequestBody Song updatedSong) {
         Optional<Song> existingSongOptional = songRepository.findById(id);
         if (existingSongOptional.isPresent()) {
             Song existingSong = existingSongOptional.get();

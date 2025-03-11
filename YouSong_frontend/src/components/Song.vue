@@ -129,21 +129,6 @@ export default {
     goToLastPage() {
       this.fetchSongs(this.totalPages - 1);
     },
-  },
-  created() {
-    this.fetchSongs(0);
-  },
-
-  /*
-    getSongs() {
-      SongService.getSongs()
-          .then((response) => {
-            this.songs = response.data;
-          })
-          .catch((error) => {
-            console.error("Error fetching songs:", error);
-          });
-    },*/
     searchSongs() {
       SongService.searchSongs(this.search)
           .then((response) => {
@@ -192,6 +177,22 @@ export default {
             alert("Failed to load the song file.");
           });
     },
+  },
+  created() {
+    this.fetchSongs(0);
+  },
+
+  /*
+    getSongs() {
+      SongService.getSongs()
+          .then((response) => {
+            this.songs = response.data;
+          })
+          .catch((error) => {
+            console.error("Error fetching songs:", error);
+          });
+    },*/
+
 
   watch: {
     search(newSearch) {
