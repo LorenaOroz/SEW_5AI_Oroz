@@ -65,6 +65,7 @@
       </audio>
     </div>
 
+    <LoginComponent/>
   </div>
 </template>
 
@@ -72,10 +73,13 @@
 import SongService from "@/services/SongService.js";
 import AddSong from "@/components/AddSong.vue";
 import EditSong from "@/components/EditSong.vue";
+import Login from "@/components/Login.vue";
+import LoginComponent from "@/components/Login.vue";
 
 export default {
   name: "Songs",
   components: {
+    LoginComponent,
     AddSong,
     EditSong,
   },

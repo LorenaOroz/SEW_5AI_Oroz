@@ -22,4 +22,8 @@ public class Song {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String fileData;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Benutzer owner;
 }
