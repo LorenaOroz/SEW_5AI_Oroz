@@ -6,9 +6,7 @@ import LoginComponent from "@/components/Login.vue";
 
 <template data-theme="retro">
   <div class="alles">
-    <div class="">
-      <LoginComponent/>
-    </div>
+   <RouterView/>
   </div>
 </template>
 

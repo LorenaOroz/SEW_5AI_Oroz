@@ -13,25 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
-    private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
-    private static final String AUTH_TOKEN_PREFIX = "Baeldung ";
-
     @Autowired
     private BenutzerRepository benutzerRepository;
 
     public Authentication getAuthentication(HttpServletRequest request) {
-        String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
-
-        System.out.println(apiKey);
-
-        if (apiKey == null || !apiKey.startsWith(AUTH_TOKEN_PREFIX)) {
-            throw new BadCredentialsException("Invalid API Key");
+        String apiKey = request.getHeader("X-API-KEY");
+        if (apiKey == null) {
+            throw new BadCredentialsException("Missing API Key");
         }
-
-        String token = apiKey.substring(AUTH_TOKEN_PREFIX.length());
-        Benutzer user = benutzerRepository.findByToken(token)
+        Benutzer user = benutzerRepository.findByToken(apiKey)
                 .orElseThrow(() -> new BadCredentialsException("Invalid API Key"));
-
         return new ApiKeyAuthentication(user.getUsername(), AuthorityUtils.NO_AUTHORITIES);
-}
+    }
+
 }

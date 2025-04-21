@@ -1,5 +1,13 @@
 <template>
   <div class="alles flex flex-col items-center">
+    <div class="absolute top-4 right-4">
+      <button class="btn btn-outline btn-error" @click="logout">
+        Logout
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+      </button>
+    </div>
     <p class="text-center text-6xl mb-12 mt-12 font-bold">Song List</p>
 
     <label class="input input-bordered flex items-center gap-2 mb-12">
@@ -65,7 +73,6 @@
       </audio>
     </div>
 
-    <LoginComponent/>
   </div>
 </template>
 
@@ -75,6 +82,7 @@ import AddSong from "@/components/AddSong.vue";
 import EditSong from "@/components/EditSong.vue";
 import Login from "@/components/Login.vue";
 import LoginComponent from "@/components/Login.vue";
+import axios from "axios";
 
 export default {
   name: "Songs",
@@ -152,10 +160,37 @@ export default {
           });
     },
 
+    async logout() {
+      try {
+        const token = localStorage.getItem('token');    // now this is correct
+
+        await axios.post(
+            'http://localhost:8080/api/logout',
+            {},                                          // no body
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-API-KEY': token
+              }
+            }
+        );
+
+        // only remove after successful logout
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('username');
+        this.$router.push('/');
+      } catch (err) {
+        console.error('Logout failed:', err);
+      }
+    }
+
+
   },
   created() {
     this.getSongs();
   },
+
   watch: {
     search(newSearch) {
       if (newSearch) {

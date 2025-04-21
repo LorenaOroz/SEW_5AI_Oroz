@@ -1,15 +1,14 @@
 package com.YouSong.controller;
+
 import com.YouSong.entity.Benutzer;
 import com.YouSong.repository.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -36,10 +35,24 @@ public class LoginController {
             Benutzer benutzer = optionalBenutzer.get();
             if (benutzer.verifyPassword(loginRequest.password)) {
                 BenutzerResponse benutzerResponse = new BenutzerResponse();
-                benutzerResponse.token = benutzer.getToken();
-                return ResponseEntity.ok().body(benutzerResponse);
+                String newToken = UUID.randomUUID().toString();
+                benutzer.setToken(newToken);
+                benutzerRepository.save(benutzer);
+                benutzerResponse.token = newToken;
+                return ResponseEntity.ok()
+                        .header("X-API-KEY", newToken)
+                        .body(benutzerResponse);
             }
         }
         return new ResponseEntity<BenutzerResponse>(HttpStatus.UNAUTHORIZED);
-}
+    }
+    @PostMapping("/api/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("X-API-KEY") String token) {
+        benutzerRepository.findByToken(token).ifPresent(user -> {
+            user.setToken(null);
+            benutzerRepository.save(user);
+        });
+        return ResponseEntity.noContent().build();
+    }
+
 }

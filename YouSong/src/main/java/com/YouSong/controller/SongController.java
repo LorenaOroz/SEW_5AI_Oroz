@@ -2,12 +2,17 @@ package com.YouSong.controller;
 
 import com.YouSong.dto.SongDTO;
 import com.YouSong.entity.Song;
+import com.YouSong.entity.Benutzer;                      // neu
 import com.YouSong.projection.SongFileProjection;
 import com.YouSong.repository.SongRepository;
+import com.YouSong.repository.BenutzerRepository;        // neu
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException; // neu
 
+import java.security.Principal;                         // neu
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +22,9 @@ import java.util.Optional;
 public class SongController {
     @Autowired
     private SongRepository songRepository;
+
+    @Autowired                                         // neu
+    private BenutzerRepository benutzerRepository;     // neu
 
     @GetMapping("/songs")
     public List<SongDTO> fetchSongs() {
@@ -32,40 +40,72 @@ public class SongController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody Song song) {
+    public ResponseEntity<Song> createSong(
+            @RequestBody Song song,
+            Principal principal                            // neu
+    ) {
+        // a) Owner aus Principal ermitteln
+        Benutzer owner = benutzerRepository
+                .findByUsername(principal.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Unbekannter Nutzer"));
+        // b) ID zurücksetzen und Owner setzen
         song.setId(0);
+        song.setOwner(owner);
+        // c) Speichern
         Song savedSong = songRepository.save(song);
         return ResponseEntity.ok(savedSong);
     }
 
     @PutMapping("/songs/{id}")
-    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody Song updatedSong) {
-        Optional<Song> existingSongOptional = songRepository.findById(id);
-        if (existingSongOptional.isPresent()) {
-            Song existingSong = existingSongOptional.get();
-            existingSong.setTitle(updatedSong.getTitle());
-            existingSong.setArtist(updatedSong.getArtist());
-            existingSong.setGenre(updatedSong.getGenre());
-            existingSong.setLength(updatedSong.getLength());
-            if (updatedSong.getFileData() != null && !updatedSong.getFileData().isEmpty()) {
-                existingSong.setFileData(updatedSong.getFileData()); // Update file data if provided
-            }
-            songRepository.save(existingSong);
-            return ResponseEntity.ok(existingSong);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Song> updateSong(
+            @PathVariable Long id,
+            @RequestBody Song updatedSong,
+            Principal principal                            // neu
+    ) {
+        Song existingSong = songRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Song nicht gefunden"));
+
+        // Owner‑Check
+        if (!existingSong.getOwner().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Du bist nicht der Besitzer dieses Songs");
         }
+
+        // Feld‑Updates
+        existingSong.setTitle(updatedSong.getTitle());
+        existingSong.setArtist(updatedSong.getArtist());
+        existingSong.setGenre(updatedSong.getGenre());
+        existingSong.setLength(updatedSong.getLength());
+        if (updatedSong.getFileData() != null && !updatedSong.getFileData().isEmpty()) {
+            existingSong.setFileData(updatedSong.getFileData());
+        }
+
+        songRepository.save(existingSong);
+        return ResponseEntity.ok(existingSong);
     }
 
 
     @DeleteMapping("/songs/{id}")
-    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
-        if (songRepository.existsById(id)) {
-            songRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteSong(
+            @PathVariable Long id,
+            Principal principal                            // neu
+    ) {
+        Song existingSong = songRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Song nicht gefunden"));
+
+        // Owner‑Check
+        if (!existingSong.getOwner().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Du bist nicht der Besitzer dieses Songs");
         }
+
+        songRepository.delete(existingSong);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/songs/search")

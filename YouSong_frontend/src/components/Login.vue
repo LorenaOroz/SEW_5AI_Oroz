@@ -31,31 +31,29 @@ export default {
   methods: {
     async login() {
       try {
+        const { data } = await axios.post(
+            'http://localhost:8080/api/login',
+            { username: this.username, password: this.password },
+            { headers: { 'Content-Type': 'application/json' } }
+        );
 
-        const response = await axios.post('http://localhost:8080/api/login', {
-          username: this.username,
-          password: this.password
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        });
-
-        console.log("Login successful", response.data);
-        this.error = null;
-
+        // 1) pull the token out
+        const token = data.token;
+        // 2) store it
+        localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', this.username);
 
         this.$router.push('/songs');
-      } catch (error) {
-        console.error("Login failed:", error);
+      } catch (err) {
+        console.error('Login failed:', err);
         this.error = 'Login failed. Please check your credentials.';
-
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('username');
+        localStorage.removeItem('token');
       }
     }
+
   }
 };
 </script>

@@ -30,15 +30,20 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll() // Allow all GET requests
-                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll() // Allow login endpoint without authentication
-                        .anyRequest().authenticated() // Require authentication for other requests
+                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()       // Allow login endpoint without authentication
+                        .requestMatchers(HttpMethod.GET,    "/api/songs/**").permitAll()  // Allow public song listing
+                        .requestMatchers(HttpMethod.POST,   "/api/logout").authenticated()// Require auth for logout
+                        .requestMatchers(HttpMethod.POST,   "/api/songs").authenticated() // Require auth for creating songs
+                        .requestMatchers(HttpMethod.PUT,    "/api/songs/**").authenticated() // Require auth for updating songs
+                        .requestMatchers(HttpMethod.DELETE, "/api/songs/**").authenticated() // Require auth for deleting songs
+                        .anyRequest().denyAll()                                            // Deny everything else
                 )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
