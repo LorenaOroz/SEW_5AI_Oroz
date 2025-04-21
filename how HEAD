@@ -1,0 +1,44 @@
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{0}: reset: moving to HEAD@{1}
+[33m3a5be90[m HEAD@{1}: reset: moving to HEAD@{1}
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{2}: reset: moving to HEAD@{1}
+[33m3a5be90[m HEAD@{3}: reset: moving to HEAD@{1}
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{4}: reset: moving to deb60de74b9b0e9b1a66630e363f424b44fe985f
+[33m3a5be90[m HEAD@{5}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m1b936b9[m HEAD@{6}: reset: moving to 1b936b97a3665b22d26e19e87a0d1d0ed79d8e8d
+[33m16b5429[m HEAD@{7}: reset: moving to 16b5429d570b700a9d7fd06bcc8f8390f973f36f
+[33m16b5429[m HEAD@{8}: commit: relationships abgenommen
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{9}: reset: moving to deb60de74b9b0e9b1a66630e363f424b44fe985f
+[33m1b936b9[m HEAD@{10}: reset: moving to 1b936b97a3665b22d26e19e87a0d1d0ed79d8e8d
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{11}: reset: moving to deb60de74b9b0e9b1a66630e363f424b44fe985f
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{12}: reset: moving to deb60de74b9b0e9b1a66630e363f424b44fe985f
+[33mdeb60de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mYouSong[m[33m, [m[1;31morigin/YouSong[m[33m)[m HEAD@{13}: merge origin/YouSong: Merge made by the 'ort' strategy.
+[33m1b936b9[m HEAD@{14}: commit (amend): validation abgenommen
+[33mb84491e[m HEAD@{15}: commit: validation abgenommen
+[33m3a5be90[m HEAD@{16}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{17}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{18}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33ma785543[m HEAD@{19}: reset: moving to a785543b29ae64e2ca111f264bde1f229bc1ae29
+[33m3a5be90[m HEAD@{20}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{21}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{22}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{23}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{24}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{25}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{26}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{27}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{28}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{29}: reset: moving to 3a5be90a376244b3e12c8c88ec4079096bc373d4
+[33m3a5be90[m HEAD@{30}: commit: paging abgenommen
+[33ma785543[m HEAD@{31}: reset: moving to a785543b29ae64e2ca111f264bde1f229bc1ae29
+[33ma785543[m HEAD@{32}: commit: File Upload and Projection abgenommen
+[33m98760b7[m HEAD@{33}: reset: moving to 98760b7197d3059ad8c636ec8b176f6bbcd4c34d
+[33m98760b7[m HEAD@{34}: reset: moving to 98760b7197d3059ad8c636ec8b176f6bbcd4c34d
+[33m98760b7[m HEAD@{35}: commit: Core 4 abgenommen
+[33m73d389f[m HEAD@{36}: commit: Core 3 fertig
+[33mad375ac[m HEAD@{37}: commit: Core 1 + 2 hoffentlich
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{38}: checkout: moving from YouSong to YouSong
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{39}: checkout: moving from dev to YouSong
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{40}: checkout: moving from dev to dev
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{41}: checkout: moving from main to dev
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{42}: Branch: renamed refs/heads/main to refs/heads/main
+[33m96ae3a6[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m, [m[1;32mdev[m[33m)[m HEAD@{44}: commit (initial): first commit
