@@ -1,18 +1,39 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input v-model="username" type="text" id="username" />
+  <div class="flex flex-col items-center justify-center min-h-screen ">
+    <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+      <h2 class="text-3xl font-bold text-center mb-6">Login</h2>
+      <form @submit.prevent="login" class="space-y-4">
+        <div>
+          <label for="username" class="block text-gray-700 font-medium mb-1">Username</label>
+          <input
+              v-model="username"
+              type="text"
+              id="username"
+              class="input input-bordered w-full"
+              placeholder="Enter your username"
+          />
+        </div>
+        <div>
+          <label for="password" class="block text-gray-700 font-medium mb-1">Password</label>
+          <input
+              v-model="password"
+              type="password"
+              id="password"
+              class="input input-bordered w-full"
+              placeholder="Enter your password"
+          />
+        </div>
+        <button
+            type="submit"
+            class="btn btn-primary w-full mt-4"
+        >
+          Login
+        </button>
+      </form>
+      <div v-if="error" class="text-red-500 text-center mt-4">
+        {{ error }}
       </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input v-model="password" type="password" id="password" />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-    <div v-if="error" class="error">{{ error }}</div>
+    </div>
   </div>
 </template>
 
@@ -37,9 +58,7 @@ export default {
             { headers: { 'Content-Type': 'application/json' } }
         );
 
-        // 1) pull the token out
         const token = data.token;
-        // 2) store it
         localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', this.username);
@@ -53,43 +72,9 @@ export default {
         localStorage.removeItem('token');
       }
     }
-
   }
 };
 </script>
 
 <style scoped>
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-.error {
-  color: red;
-  margin-top: 1rem;
-}
 </style>
